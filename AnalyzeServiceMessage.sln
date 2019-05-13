@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28809.33
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalyzeServiceMessage", "AnalyzeServiceMessage\AnalyzeServiceMessage.csproj", "{885EED90-61A7-449A-97AF-B226A51AF6B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MailService", "MailService\MailService.csproj", "{A6639475-39F1-40FF-9659-AC172E87D4F7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{885EED90-61A7-449A-97AF-B226A51AF6B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{885EED90-61A7-449A-97AF-B226A51AF6B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{885EED90-61A7-449A-97AF-B226A51AF6B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{885EED90-61A7-449A-97AF-B226A51AF6B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6639475-39F1-40FF-9659-AC172E87D4F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6639475-39F1-40FF-9659-AC172E87D4F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6639475-39F1-40FF-9659-AC172E87D4F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6639475-39F1-40FF-9659-AC172E87D4F7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FEA9C1E5-1CFC-4F1F-8C3A-F1EB8FB4687F}
+	EndGlobalSection
+EndGlobal

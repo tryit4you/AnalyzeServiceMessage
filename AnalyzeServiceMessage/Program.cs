@@ -19,7 +19,7 @@ namespace AnalyzeServiceMessage
             {
                 new AnalyzeServiceMessage()
             };
-            AnalyzeService service = new AnalyzeService();
+  
             ServiceBase.Run(ServicesToRun);
         }
     }

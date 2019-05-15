@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -11,54 +12,61 @@ namespace MailService
 {
     public class StmpMail
     {
-        public static void SendEmail(String ToEmail, string cc, string bcc, String Subj, string Message)
+        public async static void SendMail(string message)
         {
-            //Reading sender Email credential from web.config file  
+            string host, mailserver, Pass, mailto;
+            string timeLog = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
 
-            string HostAdd = ConfigurationManager.AppSettings["Host"].ToString();
-            string FromEmailid = ConfigurationManager.AppSettings["FromMail"].ToString();
-            string Pass = ConfigurationManager.AppSettings["Password"].ToString();
-
-            //creating the object of MailMessage  
-            MailMessage mailMessage = new MailMessage();
-            mailMessage.From = new MailAddress(FromEmailid); //From Email Id  
-            mailMessage.Subject = Subj; //Subject of Email  
-            mailMessage.Body = Message; //body or message of Email  
-            mailMessage.IsBodyHtml = true;
-
-            string[] ToMuliId = ToEmail.Split(',');
-            foreach (string ToEMailId in ToMuliId)
+            try
             {
-                mailMessage.To.Add(new MailAddress(ToEMailId)); //adding multiple TO Email Id  
+
+                host = ConfigurationManager.AppSettings["Host"].ToString();
+                mailto = ConfigurationManager.AppSettings["SendToEmail"].ToString();
+                mailserver = ConfigurationManager.AppSettings["EmailServer"].ToString();
+                Pass = ConfigurationManager.AppSettings["Password"].ToString();
+                
+                var smtpClient = new SmtpClient
+                {
+                    Host = host, // set your SMTP server name here
+                    Port = 587, // Port
+                    EnableSsl = true,
+                    Credentials = new NetworkCredential(mailserver, Pass)
+                };
+
+                using (var mess = new MailMessage(mailserver, mailto)
+                {
+                    Subject = "Thông báo từ dịch vụ Mail service",
+                    Body = message
+                })
+                {
+                    try
+                    {
+                        await smtpClient.SendMailAsync(mess);
+                        using (EventLog log = new EventLog("MessageService"))
+                        {
+                            log.Source = "MessageService";
+                            log.WriteEntry(timeLog+" : send mail success", EventLogEntryType.Error, 101, 1);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        using (EventLog log = new EventLog("MessageService"))
+                        {
+                            log.Source = "MessageService";
+                            log.WriteEntry("send mail with error:" + ex.Message, EventLogEntryType.Error, 101, 1);
+                        }
+                    }
+
+                }
             }
-
-
-            string[] CCId = cc.Split(',');
-
-            foreach (string CCEmail in CCId)
+            catch (ConfigurationErrorsException ex)
             {
-                mailMessage.CC.Add(new MailAddress(CCEmail)); //Adding Multiple CC email Id  
+                using (EventLog log = new EventLog("MessageService"))
+                {
+                    log.Source = "MessageService";
+                    log.WriteEntry("get configuration error: " + ex.Message, EventLogEntryType.Information, 101, 1);
+                }
             }
-
-            string[] bccid = bcc.Split(',');
-
-            foreach (string bccEmailId in bccid)
-            {
-                mailMessage.Bcc.Add(new MailAddress(bccEmailId)); //Adding Multiple BCC email Id  
-            }
-            SmtpClient smtp = new SmtpClient();  // creating object of smptpclient  
-            smtp.Host = HostAdd;              //host of emailaddress for example smtp.gmail.com etc  
-
-            //network and security related credentials  
-
-            smtp.EnableSsl = false;
-            NetworkCredential NetworkCred = new NetworkCredential();
-            NetworkCred.UserName = mailMessage.From.Address;
-            NetworkCred.Password = Pass;
-            smtp.UseDefaultCredentials = true;
-            smtp.Credentials = NetworkCred;
-            smtp.Port = 3535;
-            smtp.Send(mailMessage); //sending Email  
         }
     }
 }

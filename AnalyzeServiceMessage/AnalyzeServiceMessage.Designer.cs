@@ -28,10 +28,23 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
+            this.watchTimer = new System.Timers.Timer();
+            ((System.ComponentModel.ISupportInitialize)(this.watchTimer)).BeginInit();
+            // 
+            // watchTimer
+            // 
+            this.watchTimer.Interval = 10000D;
+            this.watchTimer.Elapsed += new System.Timers.ElapsedEventHandler(this.WatchTimer_Elapsed);
+            // 
+            // AnalyzeServiceMessage
+            // 
             this.ServiceName = "Service1";
+            ((System.ComponentModel.ISupportInitialize)(this.watchTimer)).EndInit();
+
         }
 
         #endregion
+
+        private System.Timers.Timer watchTimer;
     }
 }

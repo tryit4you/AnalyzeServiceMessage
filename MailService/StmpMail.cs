@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -58,7 +59,18 @@ namespace MailService
             smtp.UseDefaultCredentials = true;
             smtp.Credentials = NetworkCred;
             smtp.Port = 3535;
-            smtp.Send(mailMessage); //sending Email  
+            try
+            {
+                smtp.Send(mailMessage); //sending Email  
+
+            }catch(Exception ex)
+            {
+                using(EventLog log =new EventLog("MessageService"))
+                {
+                    log.Source = "MessageService";
+                    log.WriteEntry("Không thể gởi mail:" + ex.Message, EventLogEntryType.Error, 101, 1);
+                }
+            };
         }
     }
 }
